@@ -58,6 +58,12 @@ public class SentenceSpout extends BaseRichSpout {
         outputFieldsDeclarer.declare(new Fields("sentence"));
     }
 
+    /**
+     * 因为cleanup方法并不可靠，它只在 local mode 下生效，Storm集群模式下cleanup不会被调用执行，很多资源得不到释放，
+     * 解决方案：
+     * 所以在 kill topology 之前，先deactivate 相应的topology.在Spout中实现 deactivate() 方法，deactivate()方法中给bolt emit特殊的数据
+     * ，bolt中判断接收的数据为特殊数据时，调用cleanup()方法，这样就可以保证cleanup()方法得以调用
+     */
     @Override
     public void deactivate() {
         super.deactivate();
