@@ -15,28 +15,28 @@ import java.util.*;
  */
 public class ReportBolt extends BaseRichBolt {
 
-    private OutputCollector collector;
     private Map<String, Long> counts = null;
 
     public void prepare(Map map, TopologyContext topologyContext, OutputCollector outputCollector) {
-        this.collector = outputCollector;
         this.counts = new HashMap<String, Long>();
     }
 
     public void execute(Tuple tuple) {
-//        String word = tuple.getStringByField("word");
-        String word = tuple.getString(0);
+        String word = tuple.getStringByField("word2");
         Long count = tuple.getLongByField("count");
         this.counts.put(word, count);
+        System.out.println(word);
+        if (word.equals("shutDown")){
+            cleanup();
+        }
+
     }
 
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
 
     }
 
-    @Override
     public void cleanup() {
-        super.cleanup();
         System.out.println("--------FINAL COUNTS -------");
         List<String> keys = new ArrayList<String>();
         keys.addAll(this.counts.keySet());

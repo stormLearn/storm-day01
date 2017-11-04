@@ -57,4 +57,11 @@ public class SentenceSpout extends BaseRichSpout {
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
         outputFieldsDeclarer.declare(new Fields("sentence"));
     }
+
+    @Override
+    public void deactivate() {
+        super.deactivate();
+        System.out.println("deactivate to spout and bolt");
+        collector.emit(new Values("shutDown"));
+    }
 }

@@ -40,8 +40,7 @@ public class WordCountBolt extends BaseRichBolt {
      * @param tuple
      */
     public void execute(Tuple tuple) {
-//        String word = tuple.getStringByField("word");
-        String word = tuple.getString(0);
+        String word = tuple.getStringByField("word");
         Long count = this.counts.get(word);
         if(count == null){
             count = 0L;
@@ -56,6 +55,12 @@ public class WordCountBolt extends BaseRichBolt {
      * @param outputFieldsDeclarer
      */
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
-        outputFieldsDeclarer.declare(new Fields("word", "count"));
+        outputFieldsDeclarer.declare(new Fields("word2", "count"));
     }
+
+    @Override
+    public void cleanup() {
+        System.out.println("WordCountBolt clean ...........");
+    }
+
 }
